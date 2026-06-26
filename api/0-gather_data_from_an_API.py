@@ -2,13 +2,16 @@
 """Gather data from an API and display employee TODO list progress."""
 import requests
 import sys
+
 if __name__ == "__main__":
     employee_id = int(sys.argv[1])
     base_url = "https://jsonplaceholder.typicode.com"
-    user = requests.get("{}/users/{}".format(base_url, employee_id)).json()
-    todos = requests.get(
+    user_req = requests.get("{}/users/{}".format(base_url, employee_id))
+    todos_req = requests.get(
         "{}/todos".format(base_url), params={"userId": employee_id}
-    ).json()
+    )
+    user = user_req.json()
+    todos = todos_req.json()
     employee_name = user.get("name")
     done_tasks = [t for t in todos if t.get("completed")]
     total = len(todos)
